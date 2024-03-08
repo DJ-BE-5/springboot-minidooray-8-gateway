@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@Service
+@Service("accountService")
 public class GatewayAccountService {
     RestTemplate restTemplate;
     ObjectMapper objectMapper;

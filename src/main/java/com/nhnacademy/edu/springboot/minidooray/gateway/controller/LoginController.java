@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class LoginController {
@@ -26,19 +27,21 @@ public class LoginController {
         objectMapper = new ObjectMapper();
     }
 
-    @GetMapping("/user/login")
+    @GetMapping("user/login")
     public String signup() {
-        valueOperations.set("id", "responseDTO.getId()");
-        return "loginform";
+        return "login_form";
     }
 
-    @PostMapping("/user/login")
-    public String signupPost(@RequestBody LoginRequestDTO loginRequest) {
-        System.out.println("hi");
-        valueOperations.set("id", "responseDTO.getId()");
-        LoginResponseDTO responseDTO = accountService.loginRequest(loginRequest);
-        valueOperations.set("id", responseDTO.getId());
+    @PostMapping("user/login")
+    public String signupPost(@RequestBody LoginRequestDTO loginRequest,
+                             HttpServletRequest request) {
 
-        return "loginform";
+        LoginResponseDTO responseDTO = accountService.loginRequest(loginRequest);
+
+        // #todo: redis 내부 변수명 변경
+        valueOperations.set("id", responseDTO.getId());
+        request.getSession(true).setAttribute("id", responseDTO.getId());
+
+        return "login_form";
     }
 }
