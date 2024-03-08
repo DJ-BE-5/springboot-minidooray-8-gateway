@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
                 new GatewayProjectService(
                         new RestTemplate()
                 )
-        ));
+        )).addPathPatterns("/project/*");
     }
 
     @Bean

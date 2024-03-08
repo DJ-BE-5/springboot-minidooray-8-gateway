@@ -1,6 +1,8 @@
 package com.nhnacademy.edu.springboot.minidooray.gateway.controller;
 
 import com.nhnacademy.edu.springboot.minidooray.gateway.domain.LoginRequestDTO;
+import com.nhnacademy.edu.springboot.minidooray.gateway.entity.Project;
+import com.nhnacademy.edu.springboot.minidooray.gateway.entity.User;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayProjectService;
 import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,27 @@ public class ProjectController {
     @Autowired
     public ProjectController(GatewayProjectService projectService) {
         this.projectService = projectService;
+    }
+
+
+    @GetMapping("/project")
+    public String signup(@PathVariable String projectId,
+                         @RequestHeader String userId) {
+        return "project/" + projectId;
+    }
+
+    @GetMapping("/project/{projectId}")
+    public String getProject(@PathVariable Integer projectId,
+                             Model model) {
+        ProjectResponse pr = projectService.getProject(projectId);
+        Project project = new Project();
+        project.setId((int) pr.getProjectId());
+        project.setName(pr.getName());
+        // todo: ProjectResponse에서 adminId를 Project User에 넣기
+        //project.setUser();
+        project.setStatus(pr.getStatus());
+        model.addAttribute("project", project);
+        return "project";
     }
 
     @GetMapping()
