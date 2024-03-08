@@ -3,9 +3,11 @@ package com.nhnacademy.edu.springboot.minidooray.gateway.controller;
 import com.nhnacademy.edu.springboot.minidooray.gateway.domain.LoginRequestDTO;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 public class ProjectController {
     private final GatewayProjectService projectService;
 
@@ -17,8 +19,15 @@ public class ProjectController {
     @GetMapping("/project/{projectId}")
     public String signup(@PathVariable String projectId,
                          @RequestHeader String userId) {
-
         return "project/" + projectId;
+    }
+    @GetMapping("/projects")
+    public String getProjects(Model model){
+        model.addAttribute(
+                "projects",
+                projectService.getProjects()
+        );
+        return "viewProjects";
     }
 
     @PostMapping("/project/{projectId}")

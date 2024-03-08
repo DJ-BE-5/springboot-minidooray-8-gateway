@@ -19,7 +19,6 @@ public class Task {
     private List<Comment> comments;
 
     @OneToMany
-    @JoinColumn(name = "id", referencedColumnName = "task_id")
     private List<Tag> tags;
 
     @OneToOne
