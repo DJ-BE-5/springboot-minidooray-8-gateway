@@ -2,12 +2,16 @@ package com.nhnacademy.edu.springboot.minidooray.gateway.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.edu.springboot.minidooray.gateway.domain.LoginRequestDTO;
+import com.nhnacademy.edu.springboot.minidooray.gateway.domain.LoginResponseDTO;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
@@ -26,8 +30,13 @@ public class LoginController {
     }
 
     @PostMapping("/user/login")
-    public String signupPost(@RequestBody LoginRequestDTO loginRequest) {
-        accountService.userExistsRequest(null);
+    public String signupPost(@RequestBody LoginRequestDTO loginRequest,
+                             HttpServletRequest reuqest) {
+        LoginResponseDTO responseDTO = accountService.loginRequest(loginRequest);
+
+        HttpSession session = reuqest.getSession(true);
+        session.setAttribute("id", responseDTO.getId());
+
         return "loginform";
     }
 }

@@ -69,18 +69,18 @@ public class GatewayAccountService {
     }
 
     // 로그인 요청
-    public ResponseEntity<?> loginRequest(LoginRequestDTO loginRequest) {
+    public LoginResponseDTO loginRequest(LoginRequestDTO loginRequest) {
 
         HttpEntity<LoginRequestDTO> requestEntity = new HttpEntity<>(loginRequest, generateHttpJsonToJsonHeader());
 
-        ResponseEntity<?> loginResponse = restTemplate.exchange(
+        ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 requestEntity,
                 LoginResponseDTO.class);
 
         if (loginResponse.getStatusCode() == HttpStatus.OK) {
-            return loginResponse;
+            return loginResponse.getBody();
 
         } else if (loginResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
             throw new NoSuchUserException();

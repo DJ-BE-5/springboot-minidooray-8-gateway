@@ -18,7 +18,7 @@ public class Project {
 
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "id")
-    private User user;// = admin_id
+    private Member member;// = admin_id
 
     private String name;
     private String status;
