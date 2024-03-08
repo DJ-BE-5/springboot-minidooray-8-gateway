@@ -18,7 +18,7 @@ import java.util.List;
 public class GatewayAccountService {
     RestTemplate restTemplate;
     ObjectMapper objectMapper;
-    @Value("${minidooray.api.account.url}")
+    @Value("${minidooray.api.url.account}")
     String url;
 
     @Autowired

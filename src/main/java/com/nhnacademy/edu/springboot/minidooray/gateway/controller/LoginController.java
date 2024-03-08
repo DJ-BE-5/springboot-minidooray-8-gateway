@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class LoginController {
@@ -29,14 +28,15 @@ public class LoginController {
 
     @GetMapping("/user/login")
     public String signup() {
+        valueOperations.set("id", "responseDTO.getId()");
         return "loginform";
     }
 
     @PostMapping("/user/login")
-    public String signupPost(@RequestBody LoginRequestDTO loginRequest,
-                             HttpServletRequest reuqest) {
+    public String signupPost(@RequestBody LoginRequestDTO loginRequest) {
+        System.out.println("hi");
+        valueOperations.set("id", "responseDTO.getId()");
         LoginResponseDTO responseDTO = accountService.loginRequest(loginRequest);
-
         valueOperations.set("id", responseDTO.getId());
 
         return "loginform";
