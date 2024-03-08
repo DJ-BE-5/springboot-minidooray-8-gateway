@@ -1,0 +1,24 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+</head>
+<body>
+<table>
+    <tbody>
+    <tr th:if="${projects=='NoData'}">
+        <td>No data</td>
+    </tr>
+    <tr th:each="project=${projects}">
+        <td><span th:text="${project.id}"></span></td>
+        <td><span th:text="${project.user}"></span></td>
+        <td><span th:text="${project.name}"></span></td>
+        <td><span th:text="${project.status}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
