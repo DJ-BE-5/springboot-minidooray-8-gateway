@@ -2,6 +2,7 @@ package com.nhnacademy.edu.springboot.minidooray.gateway.interceptor;
 
 import com.nhnacademy.edu.springboot.minidooray.gateway.entity.User;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayProjectService;
+import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.eclipse.jetty.client.api.Authentication;
@@ -26,15 +27,20 @@ public class UserAuthCheckInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-        Long user = (Long) session.getAttribute("userId");
+        String userId = (String) session.getAttribute("userId");
         String projectId = request.getParameterMap().get("projectId")[0];
 
-        if(user == null){
+        if(userId == null){
             // 로그인 안되어있으면 로그인하라고 보내버리기
             response.sendRedirect("loginform");
             return false;
         }
+        ProjectResponse pr = gatewayProjectService.getProject(Integer.valueOf(projectId));
 
+        // 프로젝트의 관리자와 로그인된 유저의 아이디가 다르면 false
+        if(!userId.equals(pr.getAdminId())){
+            return false;
+        }
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
