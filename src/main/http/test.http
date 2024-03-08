@@ -1,0 +1,36 @@
+###create 1
+POST http://localhost:8080/accounts
+Content-Type: application/json
+
+{
+  "id": 1,
+  "number": "123",
+  "balance": 1000
+}
+
+###create 2
+POST http://localhost:8080/accounts
+Content-Type: application/json
+
+{
+  "id": 2,
+  "number": "345",
+  "balance": 2000
+}
+
+###read
+GET http://localhost:8080/accounts/1
+Content-Type: application/json
+Accept: application/json
+
+
+###read all
+GET http://localhost:8080/accounts
+Content-Type: application/json
+Accept: application/json
+
+
+###delete
+DELETE http://localhost:8080/accounts/1
+Content-Type: application/json
+Accept: application/json

@@ -1,0 +1,5 @@
+###down
+POST http://localhost:8080/management/fail
+
+###up
+POST http://localhost:8080/management/running

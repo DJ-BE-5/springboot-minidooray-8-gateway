@@ -1,0 +1,16 @@
+###
+GET http://localhost:8080/actuator/counter
+Accept: application/json
+
+###
+POST http://localhost:8080/actuator/counter
+Content-Type: application/json
+Accept: application/json
+
+{
+  "delta": 100
+}
+
+###
+DELETE http://localhost:8080/actuator/counter
+Accept: application/json
