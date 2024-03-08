@@ -21,9 +21,7 @@ public class ProjectController {
     @GetMapping("/project/{projectId}")
     public String signup(@PathVariable String projectId,
                          @RequestHeader String userId) {
-        ResponseEntity<ProjectResponse> entity = projectService.getProject(Long.valueOf(projectId));
-        Long pi = entity.getBody().getProjectId();
-        return "project/" + pi;
+        return "project/" + projectId;
     }
     @GetMapping("/projects")
     public String getProjects(Model model){

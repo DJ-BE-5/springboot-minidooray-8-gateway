@@ -24,23 +24,6 @@ public class GatewayProjectService {
     public boolean projectExistsRequest(String id) {
         return false;
     }
-    public ResponseEntity getProject(Long id) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Long> requestEntity = new HttpEntity<>(id, headers);
-
-        ResponseEntity<?> response = restTemplate.exchange(
-                "http://localhost:9999/projects",
-                HttpMethod.POST,
-                requestEntity,
-                ProjectResponse.class
-        );
-
-        if(response.getStatusCode()!=HttpStatus.CREATED){
-            return response;
-        }
-        return response;
-    }
     public List<Project> getProjects(){
 
         HttpHeaders httpHeaders = new HttpHeaders();
