@@ -8,14 +8,13 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 @Service
 public class GatewayProjectService {
 
     private final RestTemplate restTemplate;
-    private static ParameterizedTypeReference REF = new ParameterizedTypeReference<List<Project>>(){};
-
     public GatewayProjectService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -24,15 +23,10 @@ public class GatewayProjectService {
     public boolean projectExistsRequest(String id) {
         return false;
     }
-    public List<Project> getProjects(){
+    public List<ProjectResponse> getProjects(String userId){
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<List<Project>> exchange = restTemplate.exchange("localhost:9999/projects",
-                HttpMethod.GET, requestEntity,REF
+        ResponseEntity<List<ProjectResponse>> exchange = restTemplate.exchange("http://localhost:9999/projects/projectList/"+userId,
+                HttpMethod.GET, null,new ParameterizedTypeReference<List<ProjectResponse>>(){}
         );
 
         return exchange.getBody();

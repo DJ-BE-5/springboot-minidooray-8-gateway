@@ -1,22 +1,40 @@
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>Tasks</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
 <table>
-    <tbody>
-    <tr th:if="${projects=='NoData'}">
-        <td>No data</td>
+    <thead>
+    <tr>
+        <th>프로젝트 이름</th>
+        <th>관리자 아이디</th>
+        <th>프로젝트 상태</th>
     </tr>
-    <tr th:each="project=${projects}">
-        <td><span th:text="${project.id}"></span></td>
-        <td><span th:text="${project.user}"></span></td>
-        <td><span th:text="${project.name}"></span></td>
-        <td><span th:text="${project.status}"></span></td>
+    </thead>
+    <tbody>
+    <tr th:each="project : ${projects}">
+        <td th:text="${project.name}" th:href="@{'/projects/' + ${project.projectId}}"></td>
+        <td th:text="${project.adminId}"></td>
+        <td th:text="${project.status}"></td>
     </tr>
     </tbody>
 </table>

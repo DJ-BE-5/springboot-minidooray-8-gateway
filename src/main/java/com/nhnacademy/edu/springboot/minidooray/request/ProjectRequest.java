@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjectRequest {
-    long adminId;
+    String adminId;
     String name;
     String status;
 }
