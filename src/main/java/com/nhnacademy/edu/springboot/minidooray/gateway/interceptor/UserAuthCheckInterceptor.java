@@ -1,20 +1,13 @@
 package com.nhnacademy.edu.springboot.minidooray.gateway.interceptor;
 
-import com.nhnacademy.edu.springboot.minidooray.gateway.entity.User;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayProjectService;
 import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.eclipse.jetty.client.api.Authentication;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 public class UserAuthCheckInterceptor implements HandlerInterceptor {
 
@@ -31,6 +24,7 @@ public class UserAuthCheckInterceptor implements HandlerInterceptor {
         String projectId = request.getParameterMap().get("projectId")[0];
 
         if(userId == null){
+            System.out.println("Goto login");
             // 로그인 안되어있으면 로그인하라고 보내버리기
             response.sendRedirect("loginform");
             return false;
@@ -39,6 +33,7 @@ public class UserAuthCheckInterceptor implements HandlerInterceptor {
 
         // 프로젝트의 관리자와 로그인된 유저의 아이디가 다르면 false
         if(!userId.equals(pr.getAdminId())){
+            response.sendRedirect("loginform");
             return false;
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);
