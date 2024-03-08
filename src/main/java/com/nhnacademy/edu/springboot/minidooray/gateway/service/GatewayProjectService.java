@@ -23,6 +23,15 @@ public class GatewayProjectService {
     public boolean projectExistsRequest(String id) {
         return false;
     }
+
+    public ProjectResponse getProject(Integer projectId){
+
+        ResponseEntity<ProjectResponse> exchange = restTemplate.exchange("http://localhost:9999/projects/"+projectId,
+                HttpMethod.GET, null,new ParameterizedTypeReference<ProjectResponse>(){}
+        );
+        return exchange.getBody();
+    }
+
     public List<ProjectResponse> getProjects(String userId){
 
         ResponseEntity<List<ProjectResponse>> exchange = restTemplate.exchange("http://localhost:9999/projects/projectList/"+userId,
@@ -31,6 +40,7 @@ public class GatewayProjectService {
 
         return exchange.getBody();
     }
+
 
     //프로젝트 생성 요청
     public boolean projectCreateRequest(ProjectRequest project) {
