@@ -5,18 +5,21 @@ import com.nhnacademy.edu.springboot.minidooray.gateway.domain.LoginRequestDTO;
 import com.nhnacademy.edu.springboot.minidooray.gateway.domain.LoginResponseDTO;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
     private final GatewayAccountService accountService;
     ObjectMapper objectMapper;
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> valueOperations;
 
     @Autowired
     public LoginController(GatewayAccountService accountService) {
@@ -34,8 +37,7 @@ public class LoginController {
                              HttpServletRequest reuqest) {
         LoginResponseDTO responseDTO = accountService.loginRequest(loginRequest);
 
-        HttpSession session = reuqest.getSession(true);
-        session.setAttribute("id", responseDTO.getId());
+        valueOperations.set("id", responseDTO.getId());
 
         return "loginform";
     }

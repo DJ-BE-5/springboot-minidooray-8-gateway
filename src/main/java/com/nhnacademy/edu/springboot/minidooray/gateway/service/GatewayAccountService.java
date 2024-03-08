@@ -18,7 +18,6 @@ import java.util.List;
 public class GatewayAccountService {
     RestTemplate restTemplate;
     ObjectMapper objectMapper;
-
     @Value("${minidooray.api.account.url}")
     String url;
 
@@ -29,7 +28,7 @@ public class GatewayAccountService {
     }
 
     //사용자 검색 요청
-    public boolean userExistsRequest(Integer id) {
+    public boolean userExistsRequest(String id) {
         HttpEntity<UserExistsRequestDTO> requestEntity = new HttpEntity<>(new UserExistsRequestDTO(id), generateHttpJsonToJsonHeader());
 
         ResponseEntity<UserExistsResponseDTO> userExistsResponse = restTemplate.exchange(
@@ -90,19 +89,19 @@ public class GatewayAccountService {
 
     }
 
-    public ResponseEntity<?> userDeleteRequest(AccountDTO userDeleteRequest) {
+    // 회원 삭제 요청
+    public void userDeleteRequest(UserDeleteRequestDTO userDeleteRequest) {
 
         HttpEntity<?> requestEntity = new HttpEntity<>(userDeleteRequest, generateHttpJsonToJsonHeader());
 
         ResponseEntity<?> userDeleteResponse = restTemplate.exchange(
                 url,
-                HttpMethod.POST,
+                HttpMethod.DELETE,
                 requestEntity,
-                UserDeleteResponseDTO.class);
+                String.class);
 
         if (userDeleteResponse.getStatusCode() == HttpStatus.NO_CONTENT) {
-            return userDeleteResponse;
-
+            // do nothing
         } else if (userDeleteResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
             throw new NoSuchUserException();
 
