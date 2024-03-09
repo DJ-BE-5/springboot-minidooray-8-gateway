@@ -1,4 +1,4 @@
-package com.nhnacademy.edu.springboot.minidooray.gateway.intercepotor;
+package com.nhnacademy.edu.springboot.minidooray.gateway.interceptor;
 
 import com.nhnacademy.edu.springboot.minidooray.gateway.advice.GlobalExceptionHandler;
 import com.nhnacademy.edu.springboot.minidooray.gateway.controller.HomeController;
