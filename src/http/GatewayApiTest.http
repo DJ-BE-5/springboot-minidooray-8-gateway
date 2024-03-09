@@ -1,35 +1,31 @@
-###login
-POST http://localhost:8080/user/login
+###login: testuser,1q2w3e, test@test.com, sleep
+POST http://localhost:8080/user/signup
 Content-Type: application/json
+Accept: : application/json
 
 {
-  "id": "test",
-  "password": "password"
+  "id": "testuser",
+  "password": "1q2w3e"
 }
 
-###create 2
-POST http://localhost:8080/accounts
+
+###create: testuser2, 1q2w3e4r, test2@test.com, active
+POST http://localhost:8080/user/signup
 Content-Type: application/json
+Accept: : application/json
 
 {
-  "id": 2,
-  "number": "345",
-  "balance": 2000
+  "id": "testuser2",
+  "email": "test2@test.com",
+  "password": "1q2w3e4r"
 }
 
-###read
-GET http://localhost:8080/accounts/1
+###delete: testuser2, 1q2w3e4r, test2@test.com, active
+DELETE http://localhost:8080/user/withdraw
 Content-Type: application/json
 Accept: application/json
 
-
-###read all
-GET http://localhost:8080/accounts
-Content-Type: application/json
-Accept: application/json
-
-
-###delete
-DELETE http://localhost:8080/accounts/1
-Content-Type: application/json
-Accept: application/json
+{
+  "id": "testuser2",
+  "password": "1q2w3e4r"
+}
