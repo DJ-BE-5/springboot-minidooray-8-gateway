@@ -1,30 +1,28 @@
 package com.nhnacademy.edu.springboot.minidooray.gateway.controller;
 
-import com.nhnacademy.edu.springboot.minidooray.gateway.domain.UserRegisterRequestDTO;
+import com.nhnacademy.edu.springboot.minidooray.gateway.domain.UserDeleteRequestDTO;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
-public class SignUpController {
+public class WithdrawController {
     private final GatewayAccountService accountService;
 
-    @Autowired
-    public SignUpController(GatewayAccountService accountService) {
+    public WithdrawController(GatewayAccountService accountService) {
         this.accountService = accountService;
     }
 
-    @GetMapping("/user/signup")
+    @GetMapping("/user/withdraw")
     public String signup() {
-        return "signupform";
+        return "withdraw_form";
     }
 
-    @PostMapping("/user/signup")
-    public String signupPost(@RequestBody UserRegisterRequestDTO userRegisterRequest) {
-        accountService.userCreateRequest(userRegisterRequest);
-        return "signupform";
+    @PostMapping("/user/withdraw")
+    public String signupPost(@RequestBody UserDeleteRequestDTO userDeleteRequest) {
+        accountService.userDeleteRequest(userDeleteRequest);
+        return "withdraw_form";
     }
 }

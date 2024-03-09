@@ -32,7 +32,7 @@ public class GatewayAccountService {
         HttpEntity<UserExistsRequestDTO> requestEntity = new HttpEntity<>(new UserExistsRequestDTO(id), generateHttpJsonToJsonHeader());
 
         ResponseEntity<UserExistsResponseDTO> userExistsResponse = restTemplate.exchange(
-                url,
+                url + "/user/" + id,
                 HttpMethod.GET,
                 requestEntity,
                 UserExistsResponseDTO.class);
@@ -51,7 +51,7 @@ public class GatewayAccountService {
         HttpEntity<UserRegisterRequestDTO> requestEntity = new HttpEntity<>(userRegisterRequest, generateHttpJsonToJsonHeader());
 
         ResponseEntity<UserRegisterResponseDTO> userRegisterResponse = restTemplate.exchange(
-                url,
+                url + "/user",
                 HttpMethod.POST,
                 requestEntity,
                 UserRegisterResponseDTO.class);
@@ -73,7 +73,7 @@ public class GatewayAccountService {
         HttpEntity<LoginRequestDTO> requestEntity = new HttpEntity<>(loginRequest, generateHttpJsonToJsonHeader());
 
         ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.exchange(
-                url,
+                url + "/user/login/" + loginRequest.getId(),
                 HttpMethod.POST,
                 requestEntity,
                 LoginResponseDTO.class);
@@ -95,7 +95,7 @@ public class GatewayAccountService {
         HttpEntity<?> requestEntity = new HttpEntity<>(userDeleteRequest, generateHttpJsonToJsonHeader());
 
         ResponseEntity<?> userDeleteResponse = restTemplate.exchange(
-                url,
+                url + "/user/" + userDeleteRequest.getId(),
                 HttpMethod.DELETE,
                 requestEntity,
                 String.class);
