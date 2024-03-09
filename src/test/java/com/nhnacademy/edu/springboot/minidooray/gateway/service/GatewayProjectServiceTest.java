@@ -3,10 +3,10 @@ package com.nhnacademy.edu.springboot.minidooray.gateway.service;
 import com.nhnacademy.edu.springboot.minidooray.request.ProjectRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class GatewayProjectServiceTest {
 
     RestTemplate restTemplate = new RestTemplate();
@@ -14,7 +14,7 @@ class GatewayProjectServiceTest {
 
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         gatewayProjectService = new GatewayProjectService(restTemplate);
     }
 
@@ -24,7 +24,7 @@ class GatewayProjectServiceTest {
 
     @Test
     void projectCreateRequest() {
-        ProjectRequest request = new ProjectRequest("jieun","프로젝트DB설계","활성");
+        ProjectRequest request = new ProjectRequest("jieun", "프로젝트DB설계", "활성");
         boolean result = gatewayProjectService.projectCreateRequest(request);
         assertTrue(result);
 
