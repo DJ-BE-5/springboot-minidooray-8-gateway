@@ -24,7 +24,7 @@ class GatewayProjectServiceTest {
 
     @Test
     void projectCreateRequest() {
-        ProjectRequest request = new ProjectRequest(1,"프로젝트DB설계","활성");
+        ProjectRequest request = new ProjectRequest("jieun","프로젝트DB설계","활성");
         boolean result = gatewayProjectService.projectCreateRequest(request);
         assertTrue(result);
 
@@ -36,7 +36,7 @@ class GatewayProjectServiceTest {
 
     @Test
     void projectDeleteRequest() {
-        Long projectId = 2L;
+        Long projectId = 15L;
 
         boolean result = gatewayProjectService.projectDeleteRequest(projectId);
 

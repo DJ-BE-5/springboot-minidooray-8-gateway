@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProjectResponse {
     long projectId;
-    long adminId;
+    String adminId;
     String name;
     String status;
 }
