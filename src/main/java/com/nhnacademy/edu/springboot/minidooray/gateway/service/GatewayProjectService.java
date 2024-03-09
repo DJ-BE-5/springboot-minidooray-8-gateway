@@ -1,6 +1,5 @@
 package com.nhnacademy.edu.springboot.minidooray.gateway.service;
 
-import com.nhnacademy.edu.springboot.minidooray.gateway.entity.Project;
 import com.nhnacademy.edu.springboot.minidooray.request.ProjectRequest;
 import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
 import org.springframework.core.ParameterizedTypeReference;
@@ -8,13 +7,13 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.Charset;
 import java.util.List;
 
 @Service
 public class GatewayProjectService {
 
     private final RestTemplate restTemplate;
+
     public GatewayProjectService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -24,18 +23,20 @@ public class GatewayProjectService {
         return false;
     }
 
-    public ProjectResponse getProject(Integer projectId){
+    public ProjectResponse getProject(Integer projectId) {
 
-        ResponseEntity<ProjectResponse> exchange = restTemplate.exchange("http://localhost:9999/projects/"+projectId,
-                HttpMethod.GET, null,new ParameterizedTypeReference<ProjectResponse>(){}
+        ResponseEntity<ProjectResponse> exchange = restTemplate.exchange("http://localhost:9999/projects/" + projectId,
+                HttpMethod.GET, null, new ParameterizedTypeReference<ProjectResponse>() {
+                }
         );
         return exchange.getBody();
     }
 
-    public List<ProjectResponse> getProjects(String userId){
+    public List<ProjectResponse> getProjects(String userId) {
 
-        ResponseEntity<List<ProjectResponse>> exchange = restTemplate.exchange("http://localhost:9999/projects/projectList/"+userId,
-                HttpMethod.GET, null,new ParameterizedTypeReference<List<ProjectResponse>>(){}
+        ResponseEntity<List<ProjectResponse>> exchange = restTemplate.exchange("http://localhost:9999/projects/projectList/" + userId,
+                HttpMethod.GET, null, new ParameterizedTypeReference<List<ProjectResponse>>() {
+                }
         );
 
         return exchange.getBody();
@@ -55,21 +56,22 @@ public class GatewayProjectService {
                 ProjectResponse.class
         );
 
-        if(response.getStatusCode()!=HttpStatus.CREATED){
+        if (response.getStatusCode() != HttpStatus.CREATED) {
             return false;
         }
         return true;
     }
+
     //프로젝트 수정 요청
-    public boolean projectDeleteRequest(Long projectId){
+    public boolean projectDeleteRequest(Long projectId) {
         ResponseEntity<?> response = restTemplate.exchange(
-                "http://localhost:9999/projects/"+projectId,
+                "http://localhost:9999/projects/" + projectId,
                 HttpMethod.DELETE,
                 null,
                 Void.class
         );
 
-        if(response.getStatusCode()!=HttpStatus.NO_CONTENT){
+        if (response.getStatusCode() != HttpStatus.NO_CONTENT) {
             return false;
         }
         return true;

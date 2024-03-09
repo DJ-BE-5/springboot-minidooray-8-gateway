@@ -1,20 +1,5 @@
 package com.nhnacademy.edu.springboot.minidooray.gateway.controller;
 
-import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayProjectService;
-import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.ui.Model;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 class ProjectControllerTest {
 
 //    @Mock

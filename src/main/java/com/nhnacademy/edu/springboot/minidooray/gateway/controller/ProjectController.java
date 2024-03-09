@@ -1,15 +1,15 @@
 package com.nhnacademy.edu.springboot.minidooray.gateway.controller;
 
-import com.nhnacademy.edu.springboot.minidooray.gateway.domain.LoginRequestDTO;
 import com.nhnacademy.edu.springboot.minidooray.gateway.entity.Project;
-import com.nhnacademy.edu.springboot.minidooray.gateway.entity.User;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayProjectService;
 import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/projects")
@@ -44,7 +44,7 @@ public class ProjectController {
     }
 
     @GetMapping()
-    public String getProjectList(Model model){
+    public String getProjectList(Model model) {
         model.addAttribute(
                 "projects",
                 projectService.getProjects(userId)
