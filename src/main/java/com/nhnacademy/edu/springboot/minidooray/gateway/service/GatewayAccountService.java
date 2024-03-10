@@ -7,7 +7,6 @@ import com.nhnacademy.edu.springboot.minidooray.gateway.exception.NoSuchUserExce
 import com.nhnacademy.edu.springboot.minidooray.gateway.exception.PasswordNotMatchesException;
 import com.nhnacademy.edu.springboot.minidooray.gateway.exception.SomethingWentWrongException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -31,9 +30,8 @@ public class GatewayAccountService {
     @Value("${minidooray.api.url.account}")
     String url;
 
-    @Autowired
-    public GatewayAccountService(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder
+    public GatewayAccountService() {
+        this.restTemplate = new RestTemplateBuilder()
                 .requestFactory(() -> new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
                 .setConnectTimeout(Duration.ofMillis(5L * 1000))
                 .setReadTimeout(Duration.ofMillis(5L * 1000))

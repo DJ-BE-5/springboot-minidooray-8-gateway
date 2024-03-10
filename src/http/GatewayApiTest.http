@@ -8,7 +8,7 @@ Accept: : application/json
   "password": "1q2w3e"
 }
 
-###redis: testuser,1q2w3e, test@test.com, sleep
+###redis session check: testuser,1q2w3e, test@test.com, sleep
 POST http://localhost:8080/user/login.test
 Content-Type: application/json
 Accept: : application/json
