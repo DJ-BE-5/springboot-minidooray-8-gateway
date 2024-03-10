@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-public class User {
+public class Member {
     @Id
     private String id;
     private String email;
