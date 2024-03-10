@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectResponse {
-    Long projectId;
-    String adminId;
+public class TaskResponse {
+    long taskId;
     String name;
-    String status;
+    String detail;
 }

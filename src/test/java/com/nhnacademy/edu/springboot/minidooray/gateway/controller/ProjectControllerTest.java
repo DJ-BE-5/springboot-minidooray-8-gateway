@@ -1,27 +1,22 @@
 package com.nhnacademy.edu.springboot.minidooray.gateway.controller;
 
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayProjectService;
-import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.ui.Model;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class ProjectControllerTest {
+    MockMvc mockMvc;
+    private GatewayProjectService projectService;
 
-//    @Mock
-//    private GatewayProjectService projectService;
-//
-//    @InjectMocks
-//    private ProjectController projectController;
+    private ProjectController projectController;
+    @BeforeEach
+    void setUp(){
+        projectService = mock(GatewayProjectService.class);
+        projectController = new ProjectController(projectService);
+    }
+
 //
 //    @Test
 //    void getProjectList() {
