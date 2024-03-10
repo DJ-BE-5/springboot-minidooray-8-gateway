@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project</title>
+    <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+            font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+            font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-dvid{background-color:#efefef;border-color:#000000;font-weight:bold;text-align:left;vertical-align:top}
+        .tg .tg-523g{background-color:#efefef;border-color:#000000;font-weight:bold;text-align:left;vertical-align:top}
+        .tg .tg-btxf{background-color:#f9f9f9;border-color:#000000;text-align:left;vertical-align:top}
+        .tg .tg-wkkj{background-color:#efefef;border-color:#000000;font-weight:bold;text-align:left;vertical-align:top}
+        .tg .tg-73oq{border-color:#000000;text-align:left;vertical-align:top}
+        .tg .tg-haly{background-color:#656565;border-color:#000000;font-weight:bold;text-align:left;vertical-align:top}
+        .tg .tg-bg78{background-color:#efefef;border-color:#000000;font-weight:bold;text-align:left;vertical-align:top}
+        .tg .tg-i817{background-color:#f9f9f9;border-color:#000000;text-align:left;vertical-align:top}
+    </style>
+</head>
+<body>
+<table class="tg">
+    <thead>
+        <tr>
+            <th class="tg-dvid" colspan="4" th:text="${projectDetail.name}"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="tg-523g">관리자</td>
+            <td class="tg-btxf" th:text="${projectDetail.adminId}"></td>
+            <td class="tg-523g">프로젝트 상태</td>
+            <td class="tg-btxf" th:text="${projectDetail.status}"></td>
+        </tr>
+        <tr>
+            <td class="tg-wkkj">멤버</td>
+            <td class="tg-73oq" colspan="3" th:text="${memberList}"></td>
+        </tr>
+        <tr>
+            <td class="tg-haly" colspan="4"></td>
+        </tr>
+        <tr>
+            <td class="tg-dvid" colspan="4">Task List</td>
+        </tr>
+        <tr th:each="task : ${taskList}">
+            <td class="tg-bg78">이름</td>
+            <td class="tg-i817" th:text="${task.name}"></td>
+            <td class="tg-bg78">내용</td>
+            <td class="tg-i817" th:text="${task.detail}"></td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>

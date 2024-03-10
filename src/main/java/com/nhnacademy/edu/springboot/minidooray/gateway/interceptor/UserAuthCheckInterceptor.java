@@ -29,7 +29,7 @@ public class UserAuthCheckInterceptor implements HandlerInterceptor {
             response.sendRedirect("loginform");
             return false;
         }
-        ProjectResponse pr = gatewayProjectService.getProject(Integer.valueOf(projectId));
+        ProjectResponse pr = gatewayProjectService.getProject(Long.valueOf(projectId));
 
         // 프로젝트의 관리자와 로그인된 유저의 아이디가 다르면 false
         if(!userId.equals(pr.getAdminId())){

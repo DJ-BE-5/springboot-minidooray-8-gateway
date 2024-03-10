@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Tasks</title>
+    <title>Project List</title>
 
     <style>
         table {
@@ -23,18 +23,31 @@
 </head>
 <body>
 <table>
+    <h2><span th:text="${user}"/>님의 프로젝트</h2>
     <thead>
     <tr>
         <th>프로젝트 이름</th>
         <th>관리자 아이디</th>
         <th>프로젝트 상태</th>
+        <th>권한</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="project : ${projects}">
-        <td th:text="${project.name}" th:href="@{'/projects/' + ${project.projectId}}"></td>
+    <tr th:each="project : ${adminProjects}">
+        <td>
+           <a th:text="${project.name}" th:href="@{'/projects/detail/' + ${project.projectId} +'?status=admin'}"></a>
+        </td>
         <td th:text="${project.adminId}"></td>
         <td th:text="${project.status}"></td>
+        <td>관리자</td>
+    </tr>
+    <tr th:each="project : ${memberProjects}">
+        <td>
+            <a th:text="${project.name}" th:href="@{'/projects/detail/' + ${project.projectId}}"></a>
+        </td>
+        <td th:text="${project.adminId}"></td>
+        <td th:text="${project.status}"></td>
+        <td>멤버</td>
     </tr>
     </tbody>
 </table>

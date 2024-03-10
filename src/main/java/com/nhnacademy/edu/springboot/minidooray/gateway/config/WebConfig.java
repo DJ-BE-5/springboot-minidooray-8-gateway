@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/user/login.test");
         registry.addInterceptor(new UserAuthCheckInterceptor(new GatewayProjectService(new RestTemplate())))
-                .addPathPatterns("/hello/*");
+                .addPathPatterns("/hello/*","projects/*");
     }
 
     @Bean

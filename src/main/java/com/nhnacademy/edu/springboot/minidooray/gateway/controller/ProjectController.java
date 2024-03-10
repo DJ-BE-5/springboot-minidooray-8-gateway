@@ -1,63 +1,70 @@
 package com.nhnacademy.edu.springboot.minidooray.gateway.controller;
 
-import com.nhnacademy.edu.springboot.minidooray.gateway.entity.Project;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayProjectService;
 import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/projects")
 public class ProjectController {
     private final GatewayProjectService projectService;
-    private final String userId = "jieun";     //TODO : 현재 접속중인 아이디 받아와서 사용하기
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> valueOperations;
+    private String userId = "jieun";
 
     @Autowired
     public ProjectController(GatewayProjectService projectService) {
         this.projectService = projectService;
     }
 
-
-    @GetMapping("/project")
-    public String signup(@PathVariable String projectId,
-                         @RequestHeader String userId) {
-        return "project/" + projectId;
-    }
-
-    @GetMapping("/project/{projectId}")
-    public String getProject(@PathVariable Integer projectId,
-                             Model model) {
-        ProjectResponse pr = projectService.getProject(projectId);
-        Project project = new Project();
-        project.setId((int) pr.getProjectId());
-        project.setName(pr.getName());
-        // todo: ProjectResponse에서 adminId를 Project User에 넣기
-        //project.setUser();
-        project.setStatus(pr.getStatus());
-        model.addAttribute("project", project);
-        return "project";
-    }
-
     @GetMapping()
-    public String getProjectList(Model model) {
+    public String getProjectList(Model model){
         model.addAttribute(
-                "projects",
+                "adminProjects",
                 projectService.getProjects(userId)
         );
-        return "viewProjects";
+        List<Long> projectIdList = projectService.getProjectIdList(userId);
+        List<ProjectResponse> memberProjects = new ArrayList<>();
+        for(int i=0;i<projectIdList.size();i++){
+            memberProjects.add(projectService.getProject(projectIdList.get(i).longValue()));
+        }
+        model.addAttribute("memberProjects",memberProjects);
+        model.addAttribute("user",userId);
+        return "viewProjectList";
     }
 
-//    @GetMapping("{projectId}")
-//    public String getProjects(Model model){
-//        model.addAtrribute(
-//
-//        );
-//    }
+
+    @GetMapping("detail/{projectId}")
+    public String getProject(@PathVariable("projectId") long projectId,
+                             @RequestParam(name = "status", required = false) String status,
+                             Model model){
+        if(status!=null&&status.equals("admin")){
+            model.addAttribute("status","admin");
+        }
+        model.addAttribute(
+                "projectDetail",
+                projectService.getProject(projectId)
+        );
+        String memberList =  projectService.getMemberList(projectId).toString();
+        model.addAttribute(
+                "memberList",
+                memberList.substring(1,memberList.length()-1)
+
+        );
+        model.addAttribute(
+                "taskList",
+                projectService.getTaskListByProjectId(projectId)
+        );
+        return "viewProject";
+    }
 
 //    @PostMapping("/project/{projectId}")
 //    public String signupPost(@PathVariable String projectId,
