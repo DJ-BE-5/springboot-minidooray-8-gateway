@@ -6,14 +6,24 @@ import com.nhnacademy.edu.springboot.minidooray.gateway.exception.DuplicateUserI
 import com.nhnacademy.edu.springboot.minidooray.gateway.exception.NoSuchUserException;
 import com.nhnacademy.edu.springboot.minidooray.gateway.exception.PasswordNotMatchesException;
 import com.nhnacademy.edu.springboot.minidooray.gateway.exception.SomethingWentWrongException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.List;
 
+@Slf4j
 @Service("accountService")
 public class GatewayAccountService {
     RestTemplate restTemplate;
@@ -22,8 +32,13 @@ public class GatewayAccountService {
     String url;
 
     @Autowired
-    public GatewayAccountService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public GatewayAccountService(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder
+                .requestFactory(() -> new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
+                .setConnectTimeout(Duration.ofMillis(5L * 1000))
+                .setReadTimeout(Duration.ofMillis(5L * 1000))
+                .additionalMessageConverters(new StringHttpMessageConverter(StandardCharsets.UTF_8))
+                .build();
         objectMapper = new ObjectMapper();
     }
 
@@ -49,22 +64,26 @@ public class GatewayAccountService {
     public ResponseEntity<UserRegisterResponseDTO> userCreateRequest(UserRegisterRequestDTO userRegisterRequest) {
 
         HttpEntity<UserRegisterRequestDTO> requestEntity = new HttpEntity<>(userRegisterRequest, generateHttpJsonToJsonHeader());
+        try {
+            ResponseEntity<UserRegisterResponseDTO> userRegisterResponse = restTemplate.exchange(
+                    url + "/user",
+                    HttpMethod.POST,
+                    requestEntity,
+                    UserRegisterResponseDTO.class);
 
-        ResponseEntity<UserRegisterResponseDTO> userRegisterResponse = restTemplate.exchange(
-                url + "/user",
-                HttpMethod.POST,
-                requestEntity,
-                UserRegisterResponseDTO.class);
+            if (userRegisterResponse.getStatusCode() == HttpStatus.CREATED) {
+                return userRegisterResponse;
+            } else throw new SomethingWentWrongException();
 
-        if (userRegisterResponse.getStatusCode() == HttpStatus.CREATED) {
-            return userRegisterResponse;
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
 
-        } else if (userRegisterResponse.getStatusCode() == HttpStatus.CONFLICT) {
-            throw new DuplicateUserIdException();
+            if (statusCode == HttpStatus.CONFLICT) {
+                throw new DuplicateUserIdException();
 
-        } else
-            throw new SomethingWentWrongException();
-
+            } else
+                throw new SomethingWentWrongException();
+        }
     }
 
     // 로그인 요청
@@ -72,21 +91,26 @@ public class GatewayAccountService {
 
         HttpEntity<LoginRequestDTO> requestEntity = new HttpEntity<>(loginRequest, generateHttpJsonToJsonHeader());
 
-        ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.exchange(
-                url + "/user/login/" + loginRequest.getId(),
-                HttpMethod.POST,
-                requestEntity,
-                LoginResponseDTO.class);
+        try {
+            ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.exchange(
+                    url + "/user/login/" + loginRequest.getId(),
+                    HttpMethod.POST,
+                    requestEntity,
+                    LoginResponseDTO.class);
 
-        if (loginResponse.getStatusCode() == HttpStatus.OK) {
-            return loginResponse.getBody();
+            if (loginResponse.getStatusCode() == HttpStatus.OK) {
+                return loginResponse.getBody();
+            } else throw new SomethingWentWrongException();
 
-        } else if (loginResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new NoSuchUserException();
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
 
-        } else
-            throw new PasswordNotMatchesException();
+            if (statusCode == HttpStatus.NOT_FOUND) {
+                throw new NoSuchUserException();
 
+            } else
+                throw new PasswordNotMatchesException();
+        }
     }
 
     // 회원 삭제 요청
@@ -94,20 +118,26 @@ public class GatewayAccountService {
 
         HttpEntity<?> requestEntity = new HttpEntity<>(userDeleteRequest, generateHttpJsonToJsonHeader());
 
-        ResponseEntity<?> userDeleteResponse = restTemplate.exchange(
-                url + "/user/" + userDeleteRequest.getId(),
-                HttpMethod.DELETE,
-                requestEntity,
-                String.class);
+        try {
+            ResponseEntity<?> userDeleteResponse = restTemplate.exchange(
+                    url + "/user/" + userDeleteRequest.getId(),
+                    HttpMethod.DELETE,
+                    requestEntity,
+                    String.class);
 
-        if (userDeleteResponse.getStatusCode() == HttpStatus.NO_CONTENT) {
-            // do nothing
-        } else if (userDeleteResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new NoSuchUserException();
+            if (userDeleteResponse.getStatusCode() == HttpStatus.NO_CONTENT) {
+                // do nothing
+            }
 
-        } else
-            throw new PasswordNotMatchesException();
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
 
+            if (statusCode == HttpStatus.NOT_FOUND) {
+                throw new NoSuchUserException();
+
+            } else
+                throw new PasswordNotMatchesException();
+        }
     }
 
     private HttpHeaders generateHttpJsonToJsonHeader() {
