@@ -22,10 +22,7 @@ public class GatewayProjectService {
         this.restTemplate = restTemplate;
     }
 
-    //프로젝트 검색 요청
-    public boolean projectExistsRequest(String id) {
-        return false;
-    }
+
     public List<ProjectResponse> getProjects(String userId){
 
         ResponseEntity<List<ProjectResponse>> exchange = restTemplate.exchange("http://localhost:9999/projects/projectList/"+userId,
@@ -65,19 +62,19 @@ public class GatewayProjectService {
         return true;
     }
     //프로젝트 수정 요청
-    public boolean projectDeleteRequest(Long projectId){
-        ResponseEntity<?> response = restTemplate.exchange(
-                "http://localhost:9999/projects/"+projectId,
-                HttpMethod.DELETE,
-                null,
-                Void.class
-        );
-
-        if(response.getStatusCode()!=HttpStatus.NO_CONTENT){
-            throw new ProjectServiceException("프로젝트 삭제를 실패하였습니다.");
-        }
-        return true;
-    }
+//    public boolean projectDeleteRequest(Long projectId){
+//        ResponseEntity<?> response = restTemplate.exchange(
+//                "http://localhost:9999/projects/"+projectId,
+//                HttpMethod.DELETE,
+//                null,
+//                Void.class
+//        );
+//
+//        if(response.getStatusCode()!=HttpStatus.NO_CONTENT){
+//            throw new ProjectServiceException("프로젝트 삭제를 실패하였습니다.");
+//        }
+//        return true;
+//    }
 
     public List<Long> getProjectIdList(String userId) {
         ResponseEntity<ArrayList<Long>> response = restTemplate.exchange(

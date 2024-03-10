@@ -3,10 +3,12 @@ package com.nhnacademy.edu.springboot.minidooray.gateway.controller;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayProjectService;
 import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,9 @@ import java.util.List;
 @RequestMapping("/projects")
 public class ProjectController {
     private final GatewayProjectService projectService;
-    private final String userId = "jieun";     //TODO : 현재 접속중인 아이디 받아와서 사용하기
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> valueOperations;
+    private String userId;
 
     @Autowired
     public ProjectController(GatewayProjectService projectService) {
@@ -23,14 +27,13 @@ public class ProjectController {
 
     @GetMapping()
     public String getProjectList(Model model){
+        userId = valueOperations.get("minidooray8_id");
         model.addAttribute(
                 "adminProjects",
                 projectService.getProjects(userId)
         );
         List<Long> projectIdList = projectService.getProjectIdList(userId);
         List<ProjectResponse> memberProjects = new ArrayList<>();
-        System.out.println(projectIdList.get(0));
-        System.out.println(projectIdList.get(1));
         for(int i=0;i<projectIdList.size();i++){
             memberProjects.add(projectService.getProject(projectIdList.get(i).longValue()));
         }
