@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,15 +26,17 @@ class GatewayAccountServiceTest {
     MockMvc mockMvc;
     ObjectMapper objectMapper = new ObjectMapper();
     @Mock
-    RestTemplate restTemplate;
-    HttpHeaders httpHeaders;
+    RestTemplate restTemplate = Mockito.mock(RestTemplate.class);
     @InjectMocks
     GatewayAccountService accountService;
 
+    HttpHeaders httpHeaders;
+
     @BeforeEach
     void setUp() {
+
         mockMvc = MockMvcBuilders
-                .standaloneSetup(new GatewayAccountService(new RestTemplateBuilder()))
+                .standaloneSetup(new GatewayAccountService())
                 .setControllerAdvice(GlobalExceptionHandler.class)
                 .build();
 
@@ -50,45 +52,45 @@ class GatewayAccountServiceTest {
     @Test
     void userExistsRequest() {
         UserExistsRequestDTO requestDTO = new UserExistsRequestDTO();
-        requestDTO.setUserId("test");
+        requestDTO.setUserId("testuser");
 
         HttpEntity<UserExistsRequestDTO> requestEntity = new HttpEntity<>(requestDTO, httpHeaders);
 
         UserExistsResponseDTO responseDTO = new UserExistsResponseDTO();
-        responseDTO.setUserId("test");
+        responseDTO.setUserId("testuser");
         responseDTO.setExists(Boolean.TRUE);
 
         ResponseEntity<UserExistsResponseDTO> response =
                 new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
         when(restTemplate.exchange(
-                "http://localhost:9090",
+                "http://localhost:9090/user/testuser",
                 HttpMethod.GET,
                 requestEntity,
                 UserExistsResponseDTO.class))
                 .thenReturn(response);
 
-        Boolean result = accountService.userExistsRequest("test");
+        Boolean result = accountService.userExistsRequest("testuser");
         Assertions.assertTrue(result);
     }
 
     @Test
     void userCreateRequest() {
         UserRegisterRequestDTO requestDTO = new UserRegisterRequestDTO();
-        requestDTO.setId("test");
+        requestDTO.setId("testuser");
         requestDTO.setEmail("test@asd.com");
         requestDTO.setPassword("asd123");
         HttpEntity<UserRegisterRequestDTO> requestEntity = new HttpEntity<>(requestDTO, httpHeaders);
 
         UserRegisterResponseDTO responseDTO = new UserRegisterResponseDTO();
-        responseDTO.setUserId("test");
+        responseDTO.setUserId("testuser");
         responseDTO.setSuccess(Boolean.TRUE);
 
         ResponseEntity<UserRegisterResponseDTO> response =
                 new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
 
         when(restTemplate.exchange(
-                "http://localhost:9090",
+                "http://localhost:9090/user",
                 HttpMethod.POST,
                 requestEntity,
                 UserRegisterResponseDTO.class))
@@ -101,14 +103,14 @@ class GatewayAccountServiceTest {
     @Test
     void loginRequest() {
         LoginRequestDTO requestDTO = new LoginRequestDTO();
-        requestDTO.setId("test");
+        requestDTO.setId("testuser");
         requestDTO.setPassword("asd123");
 
         HttpEntity<LoginRequestDTO> requestEntity = new HttpEntity<>(requestDTO, httpHeaders);
 
 
         LoginResponseDTO responseDTO = new LoginResponseDTO();
-        responseDTO.setId("test");
+        responseDTO.setId("testuser");
         responseDTO.setPassword("asd123");
         responseDTO.setStatus("active");
 
@@ -116,7 +118,7 @@ class GatewayAccountServiceTest {
                 new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
         when(restTemplate.exchange(
-                "http://localhost:9090",
+                "http://localhost:9090/user/login/testuser",
                 HttpMethod.POST,
                 requestEntity,
                 LoginResponseDTO.class))
@@ -129,7 +131,7 @@ class GatewayAccountServiceTest {
     @Test
     void userDeleteRequest() {
         UserDeleteRequestDTO requestDTO = new UserDeleteRequestDTO();
-        requestDTO.setId("test");
+        requestDTO.setId("testuser");
         requestDTO.setPassword("qwe123");
 
         HttpEntity<UserDeleteRequestDTO> requestEntity = new HttpEntity<>(requestDTO, httpHeaders);
@@ -138,7 +140,7 @@ class GatewayAccountServiceTest {
                 new ResponseEntity<>("", HttpStatus.NO_CONTENT);
 
         when(restTemplate.exchange(
-                "http://localhost:9090",
+                "http://localhost:9090/user/testuser",
                 HttpMethod.DELETE,
                 requestEntity,
                 String.class))

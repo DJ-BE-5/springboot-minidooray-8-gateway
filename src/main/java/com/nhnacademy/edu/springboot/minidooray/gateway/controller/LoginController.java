@@ -41,10 +41,9 @@ public class LoginController {
         LoginResponseDTO responseDTO = accountService.loginRequest(loginRequest);
 
         valueOperations.set("minidooray8_id", responseDTO.getId());
-        log.debug("{}", valueOperations.get("minidooray8_id"));
         request.getSession(true).setAttribute("id", responseDTO.getId());
 
-        return "login_form";
+        return "login_success_form";
     }
 
     @PostMapping("user/login.test")

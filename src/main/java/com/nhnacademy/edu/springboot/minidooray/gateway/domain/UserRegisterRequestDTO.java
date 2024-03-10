@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Valid
 public class UserRegisterRequestDTO {
     @NotNull
-    @Length(min = 5, max = 18)
+    @Length(min = 4, max = 18)
     private String id;
 
     @NotNull
