@@ -19,12 +19,12 @@ public class SignUpController {
 
     @GetMapping("/user/signup")
     public String signup() {
-        return "signupform";
+        return "signup_form";
     }
 
     @PostMapping("/user/signup")
     public String signupPost(@RequestBody UserRegisterRequestDTO userRegisterRequest) {
         accountService.userCreateRequest(userRegisterRequest);
-        return "signupform";
+        return "signup_form";
     }
 }

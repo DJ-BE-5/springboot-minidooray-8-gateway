@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,7 +34,7 @@ class GatewayAccountServiceTest {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders
-                .standaloneSetup(new GatewayAccountService(restTemplate))
+                .standaloneSetup(new GatewayAccountService(new RestTemplateBuilder()))
                 .setControllerAdvice(GlobalExceptionHandler.class)
                 .build();
 

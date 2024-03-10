@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.edu.springboot.minidooray.gateway.domain.LoginRequestDTO;
 import com.nhnacademy.edu.springboot.minidooray.gateway.domain.LoginResponseDTO;
 import com.nhnacademy.edu.springboot.minidooray.gateway.service.GatewayAccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @Controller
 public class LoginController {
     private final GatewayAccountService accountService;
@@ -38,10 +40,20 @@ public class LoginController {
 
         LoginResponseDTO responseDTO = accountService.loginRequest(loginRequest);
 
-        // #todo: redis 내부 변수명 변경
-        valueOperations.set("id", responseDTO.getId());
+        valueOperations.set("minidooray8_id", responseDTO.getId());
+        log.debug("{}", valueOperations.get("minidooray8_id"));
         request.getSession(true).setAttribute("id", responseDTO.getId());
 
+        return "login_form";
+    }
+
+    @PostMapping("user/login.test")
+    public String signuptestpost(@RequestBody LoginRequestDTO loginRequest,
+                                 HttpServletRequest request) {
+
+        LoginResponseDTO responseDTO = accountService.loginRequest(loginRequest);
+
+        log.debug("{}", valueOperations.get("minidooray8_id"));
         return "login_form";
     }
 }
