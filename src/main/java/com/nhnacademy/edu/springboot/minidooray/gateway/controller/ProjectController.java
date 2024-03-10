@@ -18,7 +18,7 @@ public class ProjectController {
     private final GatewayProjectService projectService;
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOperations;
-    private String userId;
+    private String userId = "jieun";
 
     @Autowired
     public ProjectController(GatewayProjectService projectService) {
@@ -27,7 +27,6 @@ public class ProjectController {
 
     @GetMapping()
     public String getProjectList(Model model){
-        userId = valueOperations.get("minidooray8_id");
         model.addAttribute(
                 "adminProjects",
                 projectService.getProjects(userId)
