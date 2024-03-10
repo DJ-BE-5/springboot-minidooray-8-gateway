@@ -3,8 +3,10 @@ package com.nhnacademy.edu.springboot.minidooray.gateway.service;
 import com.nhnacademy.edu.springboot.minidooray.gateway.advice.GlobalExceptionHandler;
 import com.nhnacademy.edu.springboot.minidooray.gateway.controller.ProjectController;
 import com.nhnacademy.edu.springboot.minidooray.gateway.domain.UserRegisterResponseDTO;
+import com.nhnacademy.edu.springboot.minidooray.gateway.entity.Task;
 import com.nhnacademy.edu.springboot.minidooray.request.ProjectRequest;
 import com.nhnacademy.edu.springboot.minidooray.response.ProjectResponse;
+import com.nhnacademy.edu.springboot.minidooray.response.TaskResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,6 +66,21 @@ class GatewayProjectServiceTest {
         Assertions.assertEquals(projectService.getProjects("adminId"),responseEntity.getBody());
     }
     @Test
+    void getProject(){
+        ProjectResponse response = new ProjectResponse(1L,"jieun", "프로젝트DB설계", "활성");
+        ResponseEntity<ProjectResponse> responseEntity =
+                new ResponseEntity<>(response, HttpStatus.CREATED);
+
+        when(restTemplate.exchange(
+                "http://localhost:9999/projects/1",
+                HttpMethod.GET,
+                null,
+                ProjectResponse.class
+        )).thenReturn(responseEntity);
+        ProjectResponse result = projectService.getProject(1L);
+        Assertions.assertEquals(response, result);
+    }
+    @Test
     void projectCreateRequest() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -87,28 +104,54 @@ class GatewayProjectServiceTest {
 
     @Test
     void getProjectIdList() {
-//        List<Long> response = new ArrayList<>();
-//        response.add(1L);
-//        response.add(2L);
-//
-//        ResponseEntity<List<Long>> responseEntity =
-//                new ResponseEntity<>(response, HttpStatus.OK);
-//
-//        when(restTemplate.exchange(
-//                "http://localhost:9999/projectList/adminId",
-//                HttpMethod.GET,
-//                null,
-//                new ParameterizedTypeReference<List<Long>>() {}
-//        )).thenReturn(responseEntity);
-//        List<Long> result = projectService.getProjectIdList("adminId");
-//        Assertions.assertEquals(response, result);
+        ArrayList<Long> response = new ArrayList<>();
+        response.add(1L);
+        response.add(2L);
+
+        ResponseEntity<ArrayList<Long>> responseEntity =
+                new ResponseEntity<>(response, HttpStatus.OK);
+
+        when(restTemplate.exchange(
+                "http://localhost:9999/projectList/adminId",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<ArrayList<Long>>() {}
+        )).thenReturn(responseEntity);
+        List<Long> result = projectService.getProjectIdList("adminId");
+        Assertions.assertEquals(response, result);
     }
 
     @Test
     void getMemberList() {
+        ArrayList<String> response = new ArrayList<>();
+        response.add("jieun");
+        response.add("dongyeong");
+        ResponseEntity<ArrayList<String>> responseEntity =
+                new ResponseEntity<>(response, HttpStatus.OK);
+        when(restTemplate.exchange(
+                "http://localhost:9999/memberList/1",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<ArrayList<String>>() {}
+        )).thenReturn(responseEntity);
+        List<String> result = projectService.getMemberList(1L);
+        Assertions.assertEquals(response, result);
     }
 
     @Test
     void getTaskListByProjectId() {
+        ArrayList<TaskResponse> response = new ArrayList<>();
+        response.add(new TaskResponse(1L,"name","detail"));
+        response.add(new TaskResponse(2L,"name","detail"));
+        ResponseEntity<ArrayList<TaskResponse>> responseEntity =
+                new ResponseEntity<>(response, HttpStatus.OK);
+        when(restTemplate.exchange(
+                "http://localhost:9999/tasks/taskList/1",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<ArrayList<TaskResponse>>() {}
+        )).thenReturn(responseEntity);
+        List<TaskResponse> result = projectService.getTaskListByProjectId(1L);
+        Assertions.assertEquals(response, result);
     }
 }
